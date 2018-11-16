@@ -27,7 +27,7 @@ This repository contains a DIRECT generalized linear model that can be trained o
 
 ## Usage
 This package contains a single class, `direct.BayesGLM` which is a DIRECT generalized linear model and is implemented in only ~300 lines of code.
-To see how to use this class, see the [tutorial notebook](/tutorial.ipynb) which demonstrates usage with with both a factorized (mean-field) variational distribution, and an unfactorized mixture variational distribution.
+To see how to use this class, see the [tutorial notebook](/tutorial.ipynb) which demonstrates usage with both a factorized (mean-field) variational distribution, and an unfactorized mixture variational distribution.
 
 ## Dependencies
 This code has the following dependencies (version number crucial):

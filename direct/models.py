@@ -260,7 +260,7 @@ class BayesGLM(object):
         iw_samples = self.sample_variational(n_samples=n_samples) # indicies of the latent variable values of the weights
         gather_index = tf.concat((tf.tile(tf.reshape(tf.range(self.b, dtype=tf.int32),(-1,1)),(n_samples,1)),
                                   tf.reshape(tf.transpose(iw_samples), (-1,1))), axis=1)
-        w_samples = tf.reshape(tf.gather_nd(self.Wbar, gather_index), (self.b, n_samples)) # extract the latent variable values from the indicies
+        w_samples = tf.transpose(tf.reshape(tf.gather_nd(self.Wbar, gather_index), (n_samples, self.b))) # extract the latent variable values from the indicies
         y_samples = tf.matmul(Phi_X, w_samples)
         return y_samples
 
