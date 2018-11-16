@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='direct',
-    version='0.0',
+    version='1.0',
     description='Discrete relaxation of continuous variables for tractable variational inference.',
     url='https://github.com/treforevans/direct',
     author='Trefor W. Evans',
