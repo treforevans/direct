@@ -235,23 +235,34 @@ class BayesGLM(object):
         Inputs:
             Phi_X : the basis functions evaluated at the n_test points X. This should be of shape (n_test, b)
 
-        Notes:
-            See notebook April 5 for derivation.
+        Returns:
+            y_mean : tensor of shape (n_test, 1)
         """
         assert self.is_trained
         assert isinstance(Phi_X, np.ndarray)
-        return tf.matmul(Phi_X, self.s)
+        y_mean = tf.matmul(Phi_X, self.s)
+        return y_mean
 
 
-    def predict_var(self, Phi_X):
+    def predict_samples(self, Phi_X, n_samples=100):
         """
-        Compute the predictive posterior mean and variance using the variational distribution.
-        We will consider the full support of the variational distribution, i.e. consider every possible set of parameter values.
+        return samples of the predictive posterior
 
         Inputs:
             Phi_X : the basis functions evaluated at the n_test points X. This should be of shape (n_test, b)
+            n_samples : number of samples of the predictive posterior
+
+        Returns:
+            y_samples : tensor of shape (n_test, n_samples)
         """
-        raise NotImplementedError("See notebook Mar 20 for derivation of mean and do something similar for variance")
+        assert self.is_trained
+        assert isinstance(Phi_X, np.ndarray)
+        iw_samples = self.sample_variational(n_samples=n_samples) # indicies of the latent variable values of the weights
+        gather_index = tf.concat((tf.tile(tf.reshape(tf.range(self.b, dtype=tf.int32),(-1,1)),(n_samples,1)),
+                                  tf.reshape(tf.transpose(iw_samples), (-1,1))), axis=1)
+        w_samples = tf.reshape(tf.gather_nd(self.Wbar, gather_index), (self.b, n_samples)) # extract the latent variable values from the indicies
+        y_samples = tf.matmul(Phi_X, w_samples)
+        return y_samples
 
 
     def sample_variational(self, n_samples=100, sample_sig2=False):
@@ -263,15 +274,20 @@ class BayesGLM(object):
             w_samples : (b, n_samples)
             sig2_samples : (1, n_samples) if sample_sig2 specified
         """
-        # first sample n_samples from each mixture
-        mixture_samples = tf.multinomial(logits=tf.reshape(self.logQ, (-1, self.mbar)), # must be a 2d array so just stack all of the mixtures vertically
-                                   num_samples=n_samples, output_dtype=tf.int32)
-        mixture_samples = tf.reshape(mixture_samples, (self.n_mixtures, self.b, n_samples)) # now separate samples from the different mixtures along first axis
+        # sample the weights
+        if self.n_mixtures > 1:
+            # first sample n_samples from each mixture
+            mixture_samples = tf.multinomial(logits=tf.reshape(self.logQ, (-1, self.mbar)), # must be a 2d array so just stack all of the mixtures vertically
+                                       num_samples=n_samples, output_dtype=tf.int32)
+            mixture_samples = tf.reshape(mixture_samples, (self.n_mixtures, self.b, n_samples)) # now separate samples from the different mixtures along first axis
 
-        # then decide which to keep by sampling the mixture weights
-        i_mixture_samples = tf.squeeze(tf.multinomial(logits=tf.reshape(self.log_mix, (1,-1)), num_samples=n_samples, output_dtype=tf.int32))
-        w_samples = tf.transpose(tf.gather_nd(tf.transpose(mixture_samples, perm=(0,2,1)), indices=tf.stack([i_mixture_samples, tf.range(n_samples, dtype=tf.int32)], axis=1)))
+            # then decide which to keep by sampling the mixture weights
+            i_mixture_samples = tf.squeeze(tf.multinomial(logits=tf.reshape(self.log_mix, (1,-1)), num_samples=n_samples, output_dtype=tf.int32))
+            w_samples = tf.transpose(tf.gather_nd(tf.transpose(mixture_samples, perm=(0,2,1)), indices=tf.stack([i_mixture_samples, tf.range(n_samples, dtype=tf.int32)], axis=1)))
+        else: # mean field model so sampling is easier
+            w_samples = tf.multinomial(logits=self.logQ, num_samples=n_samples, output_dtype=tf.int32)
 
+        # sample the noise variances
         if sample_sig2: # now sample the noise variance (factorizes)
             sig2_samples = tf.multinomial(logits=tf.reshape(self.logqsig, (1,-1)), num_samples=n_samples, output_dtype=tf.int32)
             return w_samples, sig2_samples
