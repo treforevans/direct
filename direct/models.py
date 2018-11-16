@@ -155,7 +155,7 @@ class BayesGLM(object):
         return ELBO
 
 
-    def train(self, sess, n_epochs, display_step=50, quasi_newton=True):
+    def train(self, sess, n_epochs, display_step=50):
         """
         Tune the variational distribution to maximize the ELBO
 
@@ -165,7 +165,7 @@ class BayesGLM(object):
 
         # determine optimization scheme to use
         feed_dict = {}
-        if quasi_newton: #not self.reinforce_entropy: # then use quasi-newton optimizer
+        if not self.reinforce_entropy: # then use quasi-newton optimizer since deterministic loss
             logger.info("using L-BFGS-B optimizer")
             # setup optimizer
             loss = -self.ELBO
@@ -202,7 +202,7 @@ class BayesGLM(object):
                     trace['t_elapsed'].append(time()-t0)
                     trace['epoch'].append(epoch+1)
                     trace['ELBO'].append(sess.run(self.ELBO, feed_dict).squeeze())
-                    print("Epoch: %04d, ELBO: %.8g, Time elapsed: %.4g seconds." % (epoch+1, trace['ELBO'][-1], trace['t_elapsed'][-1]))
+                    print("Epoch: %04d, loss: %.8g, Time elapsed: %.4g seconds." % (epoch+1, -trace['ELBO'][-1], trace['t_elapsed'][-1]))
                     stdout.flush()
         print("Optimization Finished!")
         trace['t_elapsed'].append(time()-t0)
@@ -257,12 +257,13 @@ class BayesGLM(object):
         """
         assert self.is_trained
         assert isinstance(Phi_X, np.ndarray)
-        iw_samples = self.sample_variational(n_samples=n_samples) # indicies of the latent variable values of the weights
+        iw_samples, isig2_samples = self.sample_variational(n_samples=n_samples, sample_sig2=True) # indicies of the latent variable values of the weights and noise variances
         gather_index = tf.concat((tf.tile(tf.reshape(tf.range(self.b, dtype=tf.int32),(-1,1)),(n_samples,1)),
                                   tf.reshape(tf.transpose(iw_samples), (-1,1))), axis=1)
         w_samples = tf.transpose(tf.reshape(tf.gather_nd(self.Wbar, gather_index), (n_samples, self.b))) # extract the latent variable values from the indicies
         y_samples = tf.matmul(Phi_X, w_samples)
-        return y_samples
+        sig2_samples = tf.gather(tf.squeeze(self.sig2_grid, axis=1), isig2_samples, axis=0)
+        return y_samples, sig2_samples
 
 
     def sample_variational(self, n_samples=100, sample_sig2=False):
