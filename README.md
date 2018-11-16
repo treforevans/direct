@@ -1,4 +1,4 @@
-# direct
+# `direct`
 Discrete relaxation of continuous variables for tractable variational inference.
 
 **Code coming soon!**

@@ -1,4 +1,4 @@
-from models import BayesGLM
+from .models import BayesGLM
 
 __version__ = '0.0+'
 

@@ -59,3 +59,8 @@ Thumbs.db
 # ################
 .ipynb_checkpoints/
 octave-workspace
+
+# Setuptools generated stuff
+# ################
+/dist/
+*.egg-info
