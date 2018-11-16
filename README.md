@@ -13,13 +13,13 @@ Please cite our paper if you find this code useful in your research. The bibliog
 ```
 
 ## Overview
-In the DIRECT approach to variational inference, we discretely relax continuous variables such that posterior samples consist of sparse and low-precision integers.
+In the DIRECT approach to variational inference, we discretely relax continuous variables such that posterior samples consist of sparse and low-precision quantized integers.
 This enables memory and energy efficient inference which is critical for on-board machine learning of mobile devices as well as large-scale deployed models.
 Variational inference for discrete latent variable models typically requires the use of high variance stochastic gradient estimators, making training impractical for large-scale models.
 Instead, the DIRECT approach exploits algebraic structure of ELBO, enabling
-* exactly computation of ELBO gradients (i.e. unbiased, zero-variance gradient estimates) for fast convergence
-* a training complexity that's *independent* of the number of training points, permitting inference on large datasets
-* exact computation of statistical moments of the predictive posterior without relying on Monte Carlo sampling
+* exact computation of ELBO gradients (i.e. unbiased, zero-variance gradient estimates) for fast convergence,
+* a training complexity that's *independent* of the number of training points, permitting inference on large datasets, and
+* exact computation of statistical moments of the predictive posterior without relying on Monte Carlo sampling.
 
 The DIRECT approach is not practical for all likelihoods, however, [our paper](https://arxiv.org/abs/1809.04279) identifies a couple of popular models that are practical,
 and demonstrates efficient inference on huge datasets with an extremely low-precision (4-bit) quantized integer relaxation.
@@ -27,6 +27,18 @@ This repository contains a DIRECT generalized linear model that can be trained o
 
 ## Usage
 This package contains a single class, `direct.BayesGLM` which is a DIRECT generalized linear model and is implemented in only ~300 lines of code.
-To see how to use this class, see the [tutorial](/tutorial.ipynb) demonstrates usage with with both an factorized (mean-field) variational distribution, and an unfactorized mixture distribution.
+To see how to use this class, see the [tutorial notebook](/tutorial.ipynb) which demonstrates usage with with both a factorized (mean-field) variational distribution, and an unfactorized mixture variational distribution.
 
 ## Dependencies
+This code has the following dependencies (version number crucial):
+* python==3.6
+* tensorflow==1.10
+
+You can create a conda environment and set it up using the provided `environment.yaml` file, as follows
+```
+conda env create -f environment.yaml -n direct
+```
+then activate the environment using
+```
+source activate direct
+```

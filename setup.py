@@ -7,4 +7,5 @@ setup(name='direct',
     author='Trefor W. Evans',
     author_email='trefor.evans@mail.utoronto.ca',
     packages=['direct'],
+    python_requires='~=3.6',
     zip_safe=True)
