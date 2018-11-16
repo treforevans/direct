@@ -1,7 +1,32 @@
-# `direct`
-Discrete relaxation of continuous variables for tractable variational inference.
+# Discrete Relaxation of Continuous Variables for tractable Variational Inference (DIRECT)
+This repository contains the Tensorflow implementation of the method of performing variational inference by discretely relaxing continuous variables (DIRECT).
+[This paper](https://arxiv.org/abs/1809.04279) by Trefor W. Evans and Prasanth B. Nair appears at NIPS 2018.
 
-To see how to use the package, checkout the [tutorial](/direct_tutorial.ipynb)!
+Please cite our paper if you find this code useful in your research. The bibliographic information for the paper is
+```
+@inproceedings{evans_direct,
+  title={Discrete Relaxation of Continuous Variables for tractable Variational Inference,
+  author={Evans, Trefor W and Nair, Prasanth B},
+  booktitle={Advances in Neural Information Processing Systems},
+  year={2018}
+}
+```
 
-See the paper based on this work [here](https://arxiv.org/abs/1809.04279) which will be presented at NIPS 2018 in Montreal.
+## Overview
+In the DIRECT approach to variational inference, we discretely relax continuous variables such that posterior samples consist of sparse and low-precision integers.
+This enables memory and energy efficient inference which is critical for on-board machine learning of mobile devices as well as large-scale deployed models.
+Variational inference for discrete latent variable models typically requires the use of high variance stochastic gradient estimators, making training impractical for large-scale models.
+Instead, the DIRECT approach exploits algebraic structure of ELBO, enabling
+* exactly computation of ELBO gradients (i.e. unbiased, zero-variance gradient estimates) for fast convergence
+* a training complexity that's *independent* of the number of training points, permitting inference on large datasets
+* exact computation of statistical moments of the predictive posterior without relying on Monte Carlo sampling
 
+The DIRECT approach is not practical for all likelihoods, however, [our paper](https://arxiv.org/abs/1809.04279) identifies a couple of popular models that are practical,
+and demonstrates efficient inference on huge datasets with an extremely low-precision (4-bit) quantized integer relaxation.
+This repository contains a DIRECT generalized linear model that can be trained on massive datesets with either an factorized (mean-field) variational distribution, or an unfactorized mixture distribution.
+
+## Usage
+This package contains a single class, `direct.BayesGLM` which is a DIRECT generalized linear model and is implemented in only ~300 lines of code.
+To see how to use this class, see the [tutorial](/tutorial.ipynb) demonstrates usage with with both an factorized (mean-field) variational distribution, and an unfactorized mixture distribution.
+
+## Dependencies
