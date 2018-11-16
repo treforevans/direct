@@ -1,6 +1,6 @@
 from .models import BayesGLM
 
-__version__ = '1.0'
+__version__ = '1.1'
 
 # set up logging (note if a handler has already been set then this won't do anything)
 import logging
