@@ -42,3 +42,7 @@ then activate the environment using
 ```
 source activate direct
 ```
+and setup the DIRECT package
+```
+python setup.py develop
+```
