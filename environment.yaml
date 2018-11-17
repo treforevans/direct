@@ -2,14 +2,14 @@ name: direct
 channels:
   - defaults
 dependencies:
-  - matplotlib=2.2
+  - matplotlib
   - nb_conda
-  - numpy=1.15
+  - numpy
   - pandas
-  - pip=10.0
+  - pip
   - python=3.6
-  - scikit-learn=0.19
-  - scipy=1.1
+  - scikit-learn
+  - scipy
   - pip:
     - tensorflow==1.10.0
 
