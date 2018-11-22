@@ -14,7 +14,7 @@ Please cite our paper if you find this code useful in your research. The bibliog
 
 ## Overview
 In the DIRECT approach to variational inference, we discretely relax continuous variables such that posterior samples consist of sparse and low-precision quantized integers.
-This enables memory and energy efficient inference which is critical for on-board machine learning of mobile devices as well as large-scale deployed models.
+This enables memory and energy efficient inference which is critical for on-board machine learning on mobile devices as well as large-scale deployed models.
 Variational inference for discrete latent variable models typically require the use of high variance stochastic gradient estimators, making training impractical for large-scale models.
 Instead, the DIRECT approach exploits algebraic structure of the ELBO, enabling
 * exact computation of ELBO gradients (i.e. unbiased, zero-variance gradient estimates) for fast convergence,
