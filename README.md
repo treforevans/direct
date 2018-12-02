@@ -13,6 +13,8 @@ Please cite our paper if you find this code useful in your research. The bibliog
 ```
 
 ## Overview
+*Checkout the [3-minute video](https://youtu.be/x0XzyEJY0ds) outlining the central ideas in [our paper](https://arxiv.org/abs/1809.04279).*
+
 In the DIRECT approach to variational inference, we discretely relax continuous variables such that posterior samples consist of sparse and low-precision quantized integers.
 This enables memory and energy efficient inference which is critical for on-board machine learning on mobile devices as well as large-scale deployed models.
 Variational inference for discrete latent variable models typically require the use of high variance stochastic gradient estimators, making training impractical for large-scale models.
