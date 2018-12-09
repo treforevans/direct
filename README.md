@@ -5,9 +5,10 @@ This repository contains a Tensorflow implementation to perform variational infe
 Please cite our paper if you find this code useful in your research. The bibliographic information for the paper is
 ```
 @inproceedings{evans_direct,
-  title={Discrete Relaxation of Continuous Variables for tractable Variational Inference,
+  title={Discretely Relaxing Continuous Variables for tractable Variational Inference},
   author={Evans, Trefor W and Nair, Prasanth B},
   booktitle={Advances in Neural Information Processing Systems},
+  pages={10486--10496},
   year={2018}
 }
 ```
