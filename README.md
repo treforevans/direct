@@ -8,7 +8,7 @@ Please cite our paper if you find this code useful in your research. The bibliog
   title={Discretely Relaxing Continuous Variables for tractable Variational Inference},
   author={Evans, Trefor W and Nair, Prasanth B},
   booktitle={Advances in Neural Information Processing Systems},
-  pages={10486--10496},
+  pages={10487--10497},
   year={2018}
 }
 ```
