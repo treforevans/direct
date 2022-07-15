@@ -1,6 +1,6 @@
 # Discrete Relaxation of Continuous Variables for tractable Variational Inference (DIRECT)
 This repository contains a Tensorflow implementation to perform variational inference by discretely relaxing continuous variables (DIRECT).
-[The paper](https://arxiv.org/abs/1809.04279) outlining this method by Trefor W. Evans and Prasanth B. Nair appears at NIPS 2018.
+[The paper](https://arxiv.org/abs/1809.04279) outlining this method appears at NeurIPS 2018.
 
 Please cite our paper if you find this code useful in your research. The bibliographic information for the paper is
 ```
